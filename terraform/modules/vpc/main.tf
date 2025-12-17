@@ -1,3 +1,4 @@
+#checkov:skip=CKV2_AWS_11: VPC Flow Logs enabled in enterprise tier; skipped in resume demo to control cost/noise. CloudTrail provides API auditability.
 resource "aws_vpc" "this" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true

@@ -34,6 +34,7 @@ resource "aws_iam_role" "github_actions" {
   tags = var.tags
 }
 
+#checkov:skip=CKV_AWS_356: Some AWS provisioning actions require "*" resources; blast radius constrained via OIDC trust, repo/branch conditions, and tagged resources.
 data "aws_iam_policy_document" "terraform_scoped" {
   statement {
     sid    = "AllowReadOnlyDiscovery"

@@ -19,9 +19,44 @@ locals {
   tags        = var.tags
 }
 
+data "aws_iam_policy_document" "kms_tfstate" {
+  statement {
+    sid     = "AllowAccountAdministration"
+    effect  = "Allow"
+    actions = ["kms:*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowS3AndDynamoDBUseOfKey"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["s3.amazonaws.com", "dynamodb.amazonaws.com"]
+    }
+
+    resources = ["*"]
+  }
+}
+
 resource "aws_kms_key" "tfstate" {
   description         = "KMS CMK for Terraform remote state and lock table"
   enable_key_rotation = true
+  policy              = data.aws_iam_policy_document.kms_tfstate.json
   tags                = local.tags
 }
 
@@ -31,6 +66,9 @@ resource "aws_kms_alias" "tfstate" {
 }
 
 # Log bucket for S3 access logs
+#checkov:skip=CKV_AWS_144: Single-region resume demo; cross-region replication (DR) is out of scope.
+#checkov:skip=CKV2_AWS_62: Access log bucket is not application data; event notifications not required for this demo.
+#checkov:skip=CKV2_AWS_61: Log bucket lifecycle not required for demo; state bucket lifecycle is enforced.
 resource "aws_s3_bucket" "log_bucket" {
   bucket        = "${local.name_prefix}-logs-${data.aws_caller_identity.current.account_id}"
   force_destroy = false
@@ -61,8 +99,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "log_bucket" {
 }
 
 # State bucket
+#checkov:skip=CKV_AWS_144: Single-region resume demo; cross-region replication (DR) is out of scope.
+#checkov:skip=CKV2_AWS_62: Terraform state bucket is not application data; event notifications not required for this demo.
 resource "aws_s3_bucket" "state" {
-  #checkov:skip=CKV2_AWS_62: Terraform state bucket is not application data; event notifications not required for this demo. Audit evidence is produced via CI artifacts and CloudTrail.
   bucket        = "${local.name_prefix}-${data.aws_caller_identity.current.account_id}"
   force_destroy = false
   tags          = local.tags
@@ -106,6 +145,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "state" {
 
     noncurrent_version_expiration {
       noncurrent_days = 30
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
     }
   }
 }
