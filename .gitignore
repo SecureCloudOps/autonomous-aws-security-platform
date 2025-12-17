@@ -1,0 +1,12 @@
+# Terraform local artifacts
+**/.terraform/
+**/.terraform.lock.hcl
+**/*.tfstate
+**/*.tfstate.*
+
+# Plans
+**/tfplan
+**/tfplan.json
+
+# Local accidental folders
+Desktop/

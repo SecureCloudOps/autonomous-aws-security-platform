@@ -1,0 +1,79 @@
+name: Security CI (Terraform + OPA)
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform-security:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform/envs/demo
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE_ARN }}
+          aws-region: us-east-1
+
+
+      - name: Terraform fmt check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Run gitleaks (secrets scan)
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: "--verbose"
+
+      - name: Run Checkov (IaC scan)
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: terraform
+          quiet: true
+          soft_fail: false
+
+      - name: Terraform plan
+        run: terraform plan -out=tfplan
+
+      - name: Export plan JSON
+        run: terraform show -json tfplan > tfplan.json
+
+      - name: Setup Conftest (OPA)
+        uses: instrumenta/conftest-action@v0.4.0
+        with:
+          version: 0.56.0
+
+      - name: OPA Conftest evaluate Terraform plan
+        run: conftest test tfplan.json -p ../../policies/terraform
+
+      - name: Upload evidence artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-evidence
+          path: |
+            terraform/envs/demo/tfplan.json
+            terraform/envs/demo/tfplan
