@@ -64,18 +64,17 @@ jobs:
             --skip-check CKV_AWS_144,CKV2_AWS_62,CKV2_AWS_11,CKV_AWS_356,CKV_AWS_111,CKV_AWS_109
 
       - name: Terraform plan
-        run: terraform plan -out=tfplan
+        run: terraform -chdir=terraform/envs/demo plan -out=tfplan
 
       - name: Export plan JSON
-        run: terraform show -json tfplan > tfplan.json
+        run: terraform -chdir=terraform/envs/demo show -json tfplan > tfplan.json
 
       - name: Setup Conftest (OPA)
         uses: instrumenta/conftest-action@v0.4.0
-        with:
-          version: 0.56.0
+        
 
       - name: OPA Conftest evaluate Terraform plan
-        run: conftest test tfplan.json -p ../../policies/terraform
+        run: conftest test terraform/envs/demo/tfplan.json -p policies/terraform
 
       - name: Upload evidence artifacts
         uses: actions/upload-artifact@v4
