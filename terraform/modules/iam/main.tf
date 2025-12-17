@@ -36,8 +36,8 @@ resource "aws_iam_role" "github_actions" {
 
 data "aws_iam_policy_document" "terraform_scoped" {
   statement {
-    sid     = "AllowReadOnlyDiscovery"
-    effect  = "Allow"
+    sid    = "AllowReadOnlyDiscovery"
+    effect = "Allow"
     actions = [
       "ec2:Describe*",
       "iam:Get*",
