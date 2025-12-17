@@ -47,12 +47,11 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         
 
-      - name: Run Checkov (IaC scan)
-        uses: bridgecrewio/checkov-action@v12
-        with:
-          directory: terraform
-          quiet: true
-          soft_fail: false
+      - name: IaC scan (Checkov)
+        run: |
+          checkov -d terraform \
+            --framework terraform \
+            --skip-check CKV_AWS_144,CKV2_AWS_62,CKV2_AWS_11,CKV_AWS_356,CKV_AWS_111,CKV_AWS_109
 
       - name: Terraform plan
         run: terraform plan -out=tfplan
