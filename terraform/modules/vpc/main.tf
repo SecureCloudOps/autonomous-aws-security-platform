@@ -49,7 +49,7 @@ resource "aws_route_table_association" "private" {
 resource "aws_subnet" "public_nat" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = "10.0.100.0/24"
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false
 
   tags = merge(
     var.tags,
@@ -100,3 +100,13 @@ resource "aws_route" "private_nat_egress" {
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.this.id
 }
+
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.this.id
+
+  ingress = []
+  egress  = []
+
+  tags = merge(var.tags, { Name = "default-sg-locked-down" })
+}
+
