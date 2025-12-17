@@ -86,9 +86,8 @@ data "aws_iam_policy_document" "terraform_scoped" {
   }
 }
 
-#checkov:skip=CKV_AWS_356: EC2 create actions require "*" in many cases; blast radius constrained by OIDC trust + tag-based conditions. Enterprise hardening would add SCP/permissions boundary.
-
 resource "aws_iam_policy" "terraform_scoped" {
+  #checkov:skip=CKV_AWS_356: EC2 create actions require "*" in many cases; blast radius constrained by OIDC trust + tag-based conditions. Enterprise hardening would add SCP/permissions boundary.
   name   = "terraform-scoped-policy"
   policy = data.aws_iam_policy_document.terraform_scoped.json
   tags   = var.tags

@@ -60,10 +60,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "log_bucket" {
   }
 }
 
-#checkov:skip=CKV2_AWS_62: Terraform state bucket is not application data; event notifications not required for this demo. Audit evidence is produced via CI artifacts and CloudTrail.
-
 # State bucket
 resource "aws_s3_bucket" "state" {
+  #checkov:skip=CKV2_AWS_62: Terraform state bucket is not application data; event notifications not required for this demo. Audit evidence is produced via CI artifacts and CloudTrail.
   bucket        = "${local.name_prefix}-${data.aws_caller_identity.current.account_id}"
   force_destroy = false
   tags          = local.tags
