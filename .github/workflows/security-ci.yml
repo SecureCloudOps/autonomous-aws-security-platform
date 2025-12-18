@@ -63,6 +63,14 @@ jobs:
             --framework terraform \
             --skip-check CKV_AWS_144,CKV2_AWS_62,CKV2_AWS_11,CKV_AWS_356,CKV_AWS_111,CKV_AWS_109
 
+      - name: Debug workspace paths
+        run: |
+          pwd
+          ls -la
+          ls -la terraform || true
+          ls -la terraform/envs || true
+          ls -la terraform/envs/demo || true
+
       - name: Terraform plan
         run: terraform -chdir=terraform/envs/demo plan -out=tfplan
 
