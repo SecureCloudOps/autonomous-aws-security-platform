@@ -31,7 +31,8 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::767828729088:role/github-actions-terraform-role
+          # AWS account ID intentionally redacted for public repository
+          role-to-assume: arn:aws:iam::<AWS_ACCOUNT_ID>:role/github-actions-terraform-role
           aws-region: us-east-1
 
       - name: Terraform fmt check

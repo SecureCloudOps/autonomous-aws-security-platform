@@ -5,6 +5,8 @@
 **/tfplan
 **/tfplan.json
 .crash.log
+terraform.tfvars
+
 
 # Terraform CLI
 .terraform.lock.hcl

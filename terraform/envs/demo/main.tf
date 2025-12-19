@@ -28,7 +28,7 @@ module "iam" {
   github_repo   = "autonomous-aws-security-platform"
   github_branch = "main"
 
-  github_oidc_thumbprint = "7560d6f40fa55195f740ee2b1b7c0b4836cbe103"
+  github_oidc_thumbprint = var.github_oidc_thumbprint
 
   project_tag_value = "autonomous-aws-security-platform"
 

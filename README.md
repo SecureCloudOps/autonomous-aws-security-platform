@@ -2,6 +2,12 @@
 ## CIS AWS Foundations Benchmark
 
 ### Overview
+![CI Security Pipeline](Diagram/ci_pipeline_diagram.png)
+This diagram illustrates the end-to-end CI security enforcement flow, from code commit to policy evaluation and compliance evidence generation.
+
+
+## CI Security Pipeline Architecture and Enforcement Flow
+
 This project demonstrates autonomous prevention, detection, and enforcement of AWS and Kubernetes security controls using Infrastructure as Code, Policy as Code, and runtime admission control.
 
 ### Core Technologies
@@ -10,6 +16,13 @@ This project demonstrates autonomous prevention, detection, and enforcement of A
 - GitHub Actions
 - Open Policy Agent
 - OPA Gatekeeper
+
+### CI Pipeline Execution (Successful Run)
+
+The following screenshot shows a successful execution of the security CI pipeline, including authentication, scanning, policy enforcement, and artifact generation.
+
+![Workflow Success](screenshots/01-workflow-success.png)
+
 
 ## High-Level Architecture
 
@@ -26,6 +39,14 @@ This platform is deployed into a single AWS account and is designed using privat
 - GitHub Actions to AWS via OIDC
 - Kubernetes control plane to worker nodes
 - Admission control boundary enforced by OPA Gatekeeper
+
+**OIDC-Based Authentication Evidence**
+
+The CI pipeline authenticates to AWS using short-lived credentials via OpenID Connect. The following screenshot confirms successful role assumption without static secrets.
+
+![OIDC Authentication](screenshots/02-oidc-authentication.png)
+
+
 
 ### Trust Boundaries and Security Zones
 
@@ -82,3 +103,47 @@ This reduces exposure and enforces private-by-default networking.
 - Centralized logging to CloudWatch
 - Terraform execution logs preserved via CI/CD
 - Policy evaluation results stored as evidence
+
+## Security CI Pipeline
+
+### Infrastructure as Code Security Scanning
+
+Terraform configurations are scanned using Checkov to detect misconfigurations and enforce AWS security best practices before deployment.
+
+![Checkov IaC Scan](screenshots/03-checkov-scan.png)
+
+
+This repository includes a security-first CI pipeline that:
+- Runs Terraform fmt, validate, and plan
+- Scans IaC using Checkov
+- Evaluates Terraform plans using OPA Conftest
+- Enforces least-privilege IAM and VPC controls
+- Produces compliance evidence artifacts
+
+### Compliance Evidence and Audit Artifacts
+
+Each pipeline run produces immutable evidence artifacts, including Terraform plans, JSON outputs, and security scan results. These artifacts enable audit readiness and traceability.
+
+![Compliance Artifacts](screenshots/05-compliance-artifacts.png)
+
+
+## Key Security Design Decisions
+
+- OIDC used instead of static AWS credentials
+- Terraform plans evaluated before apply
+- Policy-as-Code enforced with OPA (Rego)
+- Evidence artifacts generated for audits
+- CI fails fast on security violations
+
+## Security and Disclosure Notice
+
+This repository is a sanitized demonstration of a security and compliance enforcement platform.
+
+- No production credentials are included
+- AWS account identifiers are redacted
+- Terraform state and plan files are excluded
+- OIDC configuration values are environment-specific
+
+This project is intended for educational and demonstration purposes.
+
+> NOTE: OIDC thumbprint value is environment-specific and intentionally omitted from this repository.
