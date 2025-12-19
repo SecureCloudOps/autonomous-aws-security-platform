@@ -1,12 +1,15 @@
-# Terraform local artifacts
-**/.terraform/
-**/.terraform.lock.hcl
+# Terraform
+**/.terraform/*
 **/*.tfstate
-**/*.tfstate.*
-
-# Plans
+**/*.tfstate.backup
 **/tfplan
 **/tfplan.json
+.crash.log
 
-# Local accidental folders
-Desktop/
+# Terraform CLI
+.terraform.lock.hcl
+
+# Sensitive local files
+*.pem
+*.key
+.env
