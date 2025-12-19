@@ -74,15 +74,15 @@ jobs:
           ls -la terraform/envs/demo || true
 
       - name: Terraform plan
-        run: terraform -chdir=terraform/envs/demo plan -out=tfplan
+        run: terraform plan -out=tfplan
 
       - name: Export plan JSON
-        run: terraform -chdir=terraform/envs/demo show -json tfplan > tfplan.json
+        run: terraform show -json tfplan > tfplan.json
 
       - name: Setup Conftest (OPA)
         uses: instrumenta/conftest-action@v0.4.0
         
-
+  
       - name: OPA Conftest evaluate Terraform plan
         run: conftest test terraform/envs/demo/tfplan.json -p policies/terraform
 
