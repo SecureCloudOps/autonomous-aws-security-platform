@@ -21,7 +21,7 @@ This project demonstrates autonomous prevention, detection, and enforcement of A
 
 The following screenshot shows a successful execution of the security CI pipeline, including authentication, scanning, policy enforcement, and artifact generation.
 
-![Workflow Success](screenshots/01-workflow-success.png)
+![Workflow Success](Screenshots/01-workflow-success.png)
 
 
 ## High-Level Architecture
@@ -44,7 +44,7 @@ This platform is deployed into a single AWS account and is designed using privat
 
 The CI pipeline authenticates to AWS using short-lived credentials via OpenID Connect. The following screenshot confirms successful role assumption without static secrets.
 
-![OIDC Authentication](screenshots/02-oidc-authentication.png)
+![OIDC Authentication](Screenshots/02-oidc-authentication.png)
 
 
 
@@ -110,7 +110,7 @@ This reduces exposure and enforces private-by-default networking.
 
 Terraform configurations are scanned using Checkov to detect misconfigurations and enforce AWS security best practices before deployment.
 
-![Checkov IaC Scan](screenshots/03-checkov-scan.png)
+![Checkov IaC Scan](Screenshots/03-checkov-scan.png)
 
 
 This repository includes a security-first CI pipeline that:
@@ -124,7 +124,7 @@ This repository includes a security-first CI pipeline that:
 
 Each pipeline run produces immutable evidence artifacts, including Terraform plans, JSON outputs, and security scan results. These artifacts enable audit readiness and traceability.
 
-![Compliance Artifacts](screenshots/05-compliance-artifacts.png)
+![Compliance Artifacts](Screenshots/05-compliance-artifacts.png)
 
 
 ## Key Security Design Decisions
