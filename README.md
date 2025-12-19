@@ -1,3 +1,12 @@
+![Terraform](https://img.shields.io/badge/Terraform-IaC-623CE4?logo=terraform&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-Cloud-232F3E?logo=amazonaws&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI/CD-2088FF?logo=githubactions&logoColor=white)
+![OIDC](https://img.shields.io/badge/OIDC-Secure_Auth-0A66C2?logo=openid&logoColor=white)
+![OPA](https://img.shields.io/badge/Open_Policy_Agent-Policy_as_Code-7A1FA2?logo=openpolicyagent&logoColor=white)
+![Checkov](https://img.shields.io/badge/Checkov-IaC_Security-0E76A8)
+![Compliance](https://img.shields.io/badge/Compliance-CIS_AWS_Foundations-2E7D32)
+![Security](https://img.shields.io/badge/Security-Shift_Left-success)
+
 # Autonomous AWS Security & Compliance Enforcement Platform
 ## CIS AWS Foundations Benchmark
 
