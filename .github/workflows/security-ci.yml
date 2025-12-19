@@ -81,10 +81,11 @@ jobs:
 
       - name: Setup Conftest (OPA)
         uses: instrumenta/conftest-action@v0.4.0
-        
-  
-      - name: OPA Conftest evaluate Terraform plan
-        run: conftest test terraform/envs/demo/tfplan.json -p policies/terraform
+        with:
+          files: terraform/envs/demo/tfplan.json
+          policy: policies/terraform
+          namespace: main
+          output: table
 
       - name: Upload evidence artifacts
         uses: actions/upload-artifact@v4
